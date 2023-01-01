@@ -1,0 +1,298 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    @media (min-width: 1025px) {
+.h-custom {
+height: 100vh !important;
+}
+}
+
+.card-registration .select-input.form-control[readonly]:not([disabled]) {
+font-size: 1rem;
+line-height: 2.15;
+padding-left: .75em;
+padding-right: .75em;
+}
+
+.card-registration .select-arrow {
+top: 13px;
+}
+
+.bg-grey {
+background-color: #eae8e8;
+}
+
+@media (min-width: 992px) {
+.card-registration-2 .bg-grey {
+border-top-right-radius: 16px;
+border-bottom-right-radius: 16px;
+}
+}
+
+@media (max-width: 991px) {
+.card-registration-2 .bg-grey {
+border-bottom-left-radius: 16px;
+border-bottom-right-radius: 16px;
+}
+}
+
+  </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script async src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"crossorigin="anonymous"></script>
+  <script async src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+     
+  <script src="./node_modules/axios/dist/axios.min.js"></script>
+  <script>
+    async function toBase64(arr) {
+        //arr = new Uint8Array(arr) if it's an ArrayBuffer
+        let qw=await arr.reduce((data, byte) => data + String.fromCharCode(byte), '');
+        return btoa(
+           qw
+        );
+        } 
+    var user=sessionStorage.getItem('user');
+    var product=[];
+    const data=async()=>{const res=await axios.get('http://localhost:8000/usercart',{user}).then(response=>{
+      //console.log(response);
+      var arr=response.data.user;
+      console.log(arr.length);
+      
+      //values:
+      var items = arr.length;
+      document.getElementById("total_items").innerHTML='Items:'+items;
+      document.getElementById("total_items1").innerHTML='Items:'+items;
+
+      // console logging the product in db:
+      for(let i=0;i<arr.length;i++){
+         product[i]=arr[i].product;
+         console.log(product[i],arr[i].product) 
+      }
+
+      
+      console.log('no of products in cart db',arr.length)
+      for(let j=0;j<product.length;j++){
+        console.log('hi');
+        var prod=product[j];
+        console.log(product[j]);
+        //image attributes:
+        const getimg=async()=>{const res1=await axios.post('http:/localhost:8000/getSingleimage',{phoneName:prod}).then(async response=>{
+          let array=response.data.data;
+          let imageString = "data:image/" + array[0].img.contentType + ";base64," + await toBase64(array[0].img.data.data);
+          
+          var image= document.createElement('div')
+          image.setAttribute('class','p-4 col-md-3 col-lg-3 col-xl-2')
+          var img=document.createElement('img');
+          img.setAttribute('src', imageString);
+          img.setAttribute('class','img-fluid');
+          image.appendChild(img)
+          
+          // img.setAttribute('height','30%');
+          // img.setAttribute('width','30%');
+                
+          //quantity:
+          var quantity= document.createElement('div');
+          quantity.setAttribute('class','col-md-3 col-lg-5 col-xl d-flex');
+          quantity.setAttribute('text-align-last','center')
+
+          //quantitybutton for negative:
+          var qbut= document.createElement('button');
+          qbut.setAttribute('class','btn px-2')
+          qbut.setAttribute('onclick',"this.parentNode.querySelector('input[type=number]').stepDown()")
+          var qbutneg = document.createTextNode('-')
+          qbut.appendChild(qbutneg)
+          quantity.appendChild(qbut);
+              
+          //quantity input:
+          var qput= document.createElement('input');
+          qput.setAttribute('class','form-control form-control-sm-3');
+          qput.setAttribute('id','form1');
+          qput.setAttribute('min','1');
+          qput.setAttribute('value','1');
+          qput.setAttribute('type','number');
+          
+          //if (qput.value==0){
+           // window.location.href('cart.html')
+          //}
+
+          quantity.appendChild(qput);
+
+          //quantitybtutton for positive:
+          var qbut2= document.createElement('button')
+          qbut2.setAttribute('class','btn px-2')
+          qbut2.setAttribute('onclick',"this.parentNode.querySelector('input[type=number]').stepUp()")
+          var qbutpos = document.createTextNode('+')
+          qbut2.appendChild(qbutpos)
+          quantity.appendChild(qbut2)
+
+          //labelValue:
+          var labelValue= document.createElement('div');
+          labelValue.setAttribute('class','col-md-3 col-lg-3 col-xl-3')
+          //label
+          var label=document.createElement('p');
+          label.setAttribute('class','p-3')
+          label.innerHTML=array[0].phoneName
+          labelValue.appendChild(label);
+
+          //spacing:
+          var space= document.createElement('div')
+          space.setAttribute('class','col-md-3 col-lg-3 col-xl-3')
+
+          //button:
+          var button= document.createElement('button');
+          var text = document.createTextNode("remove");
+          button.setAttribute('class','btn-danger rounded');
+          button.appendChild(text);
+          button.onclick=()=>{
+          var user=sessionStorage.getItem('user');
+          //console.log(user,product[j]);
+          const res=async()=>await axios.delete('http://localhost:8000/removeCart',{data :{email:user,product:product[j]}}).then(response=>{console.log('from remove Cart the response',response);});
+            res();
+            window.location.href="cart.html";
+          }
+          
+          //hr
+          // var line = document.createElement('div');
+          // var hr = document.createElement('hr')
+          // hr.setAttribute('class','my-4')
+          // line.appendChild(hr)
+          
+          var create = document.createElement('hr')
+          create.setAttribute('class','my-4')
+
+          // creating a row :
+          var inner_div= document.createElement('div')
+          inner_div.setAttribute('class','row mb-4 justify-content-between align-items-center')
+          document.getElementById('main1').appendChild(inner_div)
+          
+          
+          //appending all the elements:
+          inner_div.appendChild(image)
+          inner_div.appendChild(quantity)
+          inner_div.appendChild(labelValue);
+          inner_div.appendChild(space)
+          inner_div.appendChild(button);
+          inner_div.appendChild(create);
+
+          document.getElementById('main1').appendChild(inner_div)
+          
+          
+          //document.getElementById('main1').appendChild(inner_div);
+
+          
+//          document.getElementById('main1').appendChild(line);
+          })
+        }
+        getimg();
+      }
+    
+    })
+  }
+  data();
+  //document.getElementById('items').appendChild(items)
+  
+   
+    
+    
+  </script>
+</head>
+<body>
+  <!-- <section class="featured-categories p-9">
+    <div class="container" >
+        <div class="row" id="main">
+            
+        </div>
+    </div>  -->
+  
+
+<!-- </section>
+<div class="container">
+  <div class="col md-3 ">
+    <div class="row mb-4 d-flex justify-content-between align-items-center" id="main2" >
+      
+    </div>
+  </div>
+</div> -->
+
+
+<!-- sample -->
+<section class="h-100 h-custom" style="background-color: #d2c9ff;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+          <div class="card-body p-0">
+            <div class="row g-0">
+              <div class="col-lg-8">
+                <div class="p-5" id="main1">
+                  <div class="d-flex justify-content-between align-items-center mb-5">
+                    <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
+                    <h6 class="mb-0 text-muted" id="total_items"></h6>
+                  </div>
+                  <hr class="my-4">
+              <!--    <div class="row mb-4 justify-content-between align-items-center" id="main1" >
+                     content 
+                  </div>     --> 
+                </div>
+              </div>
+              <!-- summary -->
+              <div class="col-lg-4 bg-grey">
+                <div class="p-5">
+                  <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                  <hr class="my-4">
+
+                  <div class="d-flex justify-content-between mb-4">
+                    <h5 class="text-uppercase" id="total_items1"></h5>
+                    <h5>€ 132.00</h5>
+                  </div>
+
+                  <h5 class="text-uppercase mb-3">Shipping</h5>
+
+                  <div class="mb-4 pb-2">
+                    <select class="select">
+                      <option value="1">Standard-Delivery- €5.00</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                      <option value="4">Four</option>
+                    </select>
+                  </div>
+
+                  <h5 class="text-uppercase mb-3">Give code</h5>
+
+                  <div class="mb-5">
+                    <div class="form-outline">
+                      <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
+                      <label class="form-label" for="form3Examplea2">Enter your code</label>
+                    </div>
+                  </div>
+
+                  <hr class="my-4">
+
+                  <div class="d-flex justify-content-between mb-5">
+                    <h5 class="text-uppercase">Total price</h5>
+                    <h5>€ 137.00</h5>
+                  </div>
+
+                  <button type="button" class="btn btn-dark btn-block btn-lg"
+                    data-mdb-ripple-color="dark">Register</button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- sample -->
+
+
+

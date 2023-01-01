@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script async src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"crossorigin="anonymous"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+     
+    <style> 
+    
+    #main{
+            padding: 2%;
+            float:left;  
+            background:rgb(179, 175, 175);
+            width:25%;
+            height:280px;
+            margin:10px 20px;
+            border-radius: 5%;
+            box-shadow: 2px 2px 2px 2px;
+            border: 2px solid rgb(231, 180, 180);
+            text-align: center;
+    }
+    
+        
+       
+    </style> 
+    <script src="./node_modules/axios/dist/axios.min.js"></script>
+    <script>
+        async function toBase64(arr) {
+        //arr = new Uint8Array(arr) if it's an ArrayBuffer
+        let qw=await arr.reduce((data, byte) => data + String.fromCharCode(byte), '');
+        return btoa(
+           qw
+        );
+        }    
+      const getimages=async()=>{
+        const res =await axios.get('http://localhost:8000/getimages').then(async response=>{
+            console.log(response);
+           var array=response.data;
+           for(var i=0;i<array.length;i++){
+            let n=array[i].phoneName;
+            let n2=array[i].androidVersion;
+
+            console.log(n+" "+n2);
+            let inner_div=document.createElement('div');
+            //let outer_div=document.createElement('div');
+            //inner_div.setAttribute('class',"p-2 border");
+            //inner_div.setAttribute('style',"border-radius: 1rem;");
+            inner_div.setAttribute('class',"col-md-4 justify-content-center align-items-center d-flex flex-column card bg-white rounded-pill");
+            inner_div.setAttribute('style',"max-width:350px; margin-bottom:10px; margin-left:15px; padding:8px;");
+
+            var labelValue=document.createElement('label');
+            labelValue.innerHTML='Model Name:'+n+'<br>'+'Anroid Version :'+n2+'<br>';
+            labelValue.setAttribute('class','bottom-0')
+
+            var img=document.createElement('img');
+            let imageString = "data:image/" + array[i].img.contentType + ";base64," + await toBase64(array[i].img.data.data);
+            img.setAttribute('src', imageString);
+            //img.setAttribute('width','175px');
+            img.setAttribute('height','200px');
+            //img.setAttribute('class','img-fluid')
+            var image= document.createElement('div')
+            image.appendChild(img)
+            
+
+            var but=document.createElement('button');
+            var text = document.createTextNode("Add to cart");
+            but.setAttribute('class',"btn btn-primary mb-0 btn-sm");
+            but.appendChild(text);
+            but.onclick=function(){
+                axios.post('http://localhost:8000/insertCart',{
+                  email:sessionStorage.getItem('user'),
+                  product:n,
+                  quantity:1
+                })
+                window.location.href = "cart.html";
+            }
+
+
+
+            inner_div.appendChild(img);
+            inner_div.appendChild(labelValue);
+            inner_div.appendChild(but);
+            
+            inner_div.setAttribute('max-width','100px')
+            document.getElementById('main1').appendChild(inner_div);
+            //document.getElementById('main1').appendChild(img);
+            //document.getElementById('main1').appendChild(labelValue);
+            //document.getElementById('main1').appendChild(but);
+           }
+        })
+    }
+    getimages();
+
+    function pass_data(){
+      //const array=["samsung","oneplus","vivo"];
+      let brand=document.getElementById('search_button').value;
+      brand=brand.toLowerCase();
+      //let flag=0
+      //for(let i=0;i<array.length;i++){
+       // if(brand==array[i]){
+         //   flag=1;
+            sessionStorage.setItem('user_searched',brand);
+            window.location.href="searchPage.html";
+      }
+      //}
+      //if(flag==0){
+       // alert('No such brand found');
+      //}
+      
+    //}
+         
+    </script>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand">Mobile Paradise</a>
+      
+      <input id="search_button" class="form-control" style="border-radius:10px; width:45%; margin-left:10%;" type="search" placeholder="Search by brand or Product or RAM" aria-label="Search">
+      <button  style="margin-right:20%; " onclick="pass_data()" type="button" class="btn btn-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg"  width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+          </svg>
+        </button>
+    </div>
+  </nav><br><br>
+  
+
+        <section class="featured-categories">
+            <div class="container" >
+                <div class="row" id="main1">
+                    
+                </div>
+            </div> 
+
+        </section>
+
+</div>
+
+    
+</body>
+</html>

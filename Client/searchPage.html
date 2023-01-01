@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script async src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"crossorigin="anonymous"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+     
+    <script src="./node_modules/axios/dist/axios.min.js"></script>
+    <script>
+       async function toBase64(arr) {
+        //arr = new Uint8Array(arr) if it's an ArrayBuffer
+        let qw=await arr.reduce((data, byte) => data + String.fromCharCode(byte), '');
+        return btoa(
+           qw
+        );
+        }    
+      const getimages=async()=>{
+        const res =await axios.get('http://localhost:8000/getimages').then(async response=>{
+            console.log(response);
+           var array=response.data;
+           for(var i=0;i<array.length;i++){
+            let n1=array[i].phoneName;
+            let n2=array[i].companyName;
+            let front_cam=array[i].frontCam;
+            let back_cam=array[i].backCam;
+            let battery=array[i].battery;
+            let storage=array[i].internalStorage;
+            let Technology=array[i].Technology;
+            let dimension=array[i].dimension;
+            let weight=array[i].weight;
+            let build=array[i].build;
+            let sim=array[i].SIM;
+            let size=array[i].size;
+            let resolution=array[i].resolution;
+            let protection=array[i].protection;
+            let cpu=array[i].CPU;
+            let gpu=array[i].GPU;
+            let androidVersion=array[i].androidVersion;
+
+
+
+
+            let brand=sessionStorage.getItem('user_searched');
+
+            n1=n1.toLowerCase();
+            
+
+            console.log(n1.toLowerCase());
+            console.log(brand);
+            if(n2.toLowerCase()==brand)
+            {
+                let inner_div=document.createElement('div');
+                inner_div.setAttribute('class',"col-md-4 justify-content-center align-items-center d-flex flex-column card bg-white rounded-pill");
+                inner_div.setAttribute('style',"max-width:350px; margin-bottom:10px; margin-left:15px; padding:8px;");
+
+                var labelValue=document.createElement('label');
+                labelValue.innerHTML='Model Name:'+n1+'<br>'+'Company Name :'+n2+'<br>';
+
+                var img=document.createElement('img');
+                let imageString = "data:image/" + array[i].img.contentType + ";base64," + await toBase64(array[i].img.data.data);
+                img.setAttribute('src', imageString);
+                img.setAttribute('width','30%');
+                img.setAttribute('height','70%');
+        
+
+                inner_div.appendChild(img);
+                inner_div.appendChild(labelValue);
+                
+                document.getElementById('main1').appendChild(inner_div);
+              
+           }
+           else if( n1.toLowerCase()==brand || n1.includes(brand)){
+               let inner_div=document.createElement('div');
+               inner_div.setAttribute('class',"col-sm-4 p-4 sidebar align-items-center");
+               inner_div.setAttribute('style','margin-top:20px')
+              
+               //image
+               let img=document.createElement('img');
+               let imageString = "data:image/" + array[i].img.contentType + ";base64," + await toBase64(array[i].img.data.data);
+               img.setAttribute('src', imageString);
+               img.setAttribute('class','img-fluid');
+
+
+               //content
+               let child_div2=document.createElement('div');
+               child_div2.setAttribute('class',"container-fluid col-sm-6  p-3 main ");
+               //child_div2.setAttribute('style',"min-width:250px ");
+
+
+               var first_label=document.createElement('label');
+               first_label.innerHTML='<h2><b>'+n1+'</b></h2><br>'+'<h5><b>Network</b></h5>'+'&nbsp&nbsp&nbsp&nbspTechnology : '+Technology;
+
+               var sec_label=document.createElement('label');
+               sec_label.innerHTML='<h5><b>Body</b></h5>'+'&nbsp&nbsp&nbsp&nbspDimension : '+dimension+'<br>'+'&nbsp&nbsp&nbsp&nbspWeight :'
+               +weight+'<br>'+'&nbsp&nbsp&nbsp&nbspBuild :'+build+'<br>'+'&nbsp&nbsp&nbsp&nbspSIM :'+sim;
+
+
+               var third_label=document.createElement('label');
+               third_label.innerHTML='<h5><b>Display</b></h5>'+'&nbsp&nbsp&nbsp&nbspSize : '+size+'<br>'+'&nbsp&nbsp&nbsp&nbspResolution :'
+               +resolution+'<br>'+'&nbsp&nbsp&nbsp&nbspProtection :'+protection;
+
+
+               var fourth_label=document.createElement('label');
+               fourth_label.innerHTML='<h5><b>Platform</b></h5>'+'&nbsp&nbsp&nbsp&nbspCPU : '+cpu+'<br>'+'&nbsp&nbsp&nbsp&nbspGPU :'
+               +gpu+'<br>'+'&nbsp&nbsp&nbsp&nbspOS :'+androidVersion;
+
+               const myarray=front_cam.split(',');
+
+
+               var fifth_label=document.createElement('label');
+               fifth_label.innerHTML='<h5><b>Main Camera</b></h5>'+'&nbsp&nbsp&nbsp&nbsp  '+myarray[0]+' Mp<br>'+'&nbsp&nbsp&nbsp&nbsp&nbsp'
+               +myarray[1]+' Mp<br>'+'&nbsp&nbsp&nbsp&nbsp&nbsp'+myarray[2]+' Mp';
+
+
+            //    var labelValue=document.createElement('label');
+            //    labelValue.innerHTML='<center><b>'+n1+'</b></center><br>'+'Company Name : '+n2+'<br>Front Camera : '+front_cam+'<br>Back camera:'+back_cam;
+                 child_div2.appendChild(first_label);
+                 child_div2.appendChild(sec_label);
+                 child_div2.appendChild(third_label);
+                 child_div2.appendChild(fourth_label);
+                 child_div2.appendChild(fifth_label);
+
+
+
+
+
+               inner_div.appendChild(img)
+               //inner_div.appendChild(child_div1)
+
+               document.getElementById('main2').appendChild(inner_div);
+               document.getElementById('main2').appendChild(child_div2);
+
+               break;
+           }
+        }
+        })
+    }
+    getimages();
+
+         
+    </script>
+</head>
+<body>
+  
+
+        <section class="featured-categories">
+            <div class="container" >
+                <div class="row " id="main1">
+                    
+                </div>
+            </div> 
+
+        </section>
+
+        <div class="container ">
+          <div id="main2" class="row">
+
+          </div>
+
+        </div>
+</div>
+
+    
+</body>
+</html>
