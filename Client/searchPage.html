@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Search Page</title>
     <script async src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"crossorigin="anonymous"></script>
     <script async src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -23,6 +23,7 @@
         const res =await axios.get('http://localhost:8000/getimages').then(async response=>{
             console.log(response);
            var array=response.data;
+           let flag=0;
            for(var i=0;i<array.length;i++){
             let n1=array[i].phoneName;
             let n2=array[i].companyName;
@@ -41,12 +42,13 @@
             let cpu=array[i].CPU;
             let gpu=array[i].GPU;
             let androidVersion=array[i].androidVersion;
+            let price=array[i].price;
 
 
 
-
+            let ph_name=array[i].phoneName;
             let brand=sessionStorage.getItem('user_searched');
-
+            brand=brand.toLowerCase();
             n1=n1.toLowerCase();
             
 
@@ -54,12 +56,18 @@
             console.log(brand);
             if(n2.toLowerCase()==brand)
             {
-                let inner_div=document.createElement('div');
-                inner_div.setAttribute('class',"col-md-4 justify-content-center align-items-center d-flex flex-column card bg-white rounded-pill");
-                inner_div.setAttribute('style',"max-width:350px; margin-bottom:10px; margin-left:15px; padding:8px;");
+                
+            let inner_div=document.createElement('div');
+            inner_div.setAttribute('class',"col-md-4 justify-content-center align-items-center d-flex flex-column bg-white rounded-pill");
+            inner_div.setAttribute('style',"max-width:350px; margin-bottom:10px; margin-left:15px; padding:8px;");
 
-                var labelValue=document.createElement('label');
-                labelValue.innerHTML='Model Name:'+n1+'<br>'+'Company Name :'+n2+'<br>';
+            var labelValue=document.createElement('label');
+            labelValue.innerHTML='<h5><b>'+n1+'</b></h5>';
+
+            var pricelabel=document.createElement('label');
+            pricelabel.setAttribute('class','text-primary');
+            pricelabel.innerHTML=array[i].price;
+
 
                 var img=document.createElement('img');
                 let imageString = "data:image/" + array[i].img.contentType + ";base64," + await toBase64(array[i].img.data.data);
@@ -68,10 +76,33 @@
                 img.setAttribute('height','70%');
         
 
-                inner_div.appendChild(img);
-                inner_div.appendChild(labelValue);
                 
-                document.getElementById('main1').appendChild(inner_div);
+
+            var but1=document.createElement('button');
+            var text1 = document.createTextNode("View Details");
+            but1.setAttribute('class',"btn btn-success btn-sm");
+            but1.setAttribute('style','margin-top:3px');
+            but1.appendChild(text1);
+
+
+            
+
+            but1.onclick=function(){
+              sessionStorage.setItem('user_searched',n1);
+              window.location.href="searchPage.html";
+            }
+
+
+            inner_div.appendChild(img);
+            inner_div.appendChild(labelValue);
+            inner_div.appendChild(pricelabel);
+            
+            inner_div.appendChild(but1);
+
+            
+
+            document.getElementById('main1').appendChild(inner_div);
+                flag=1;
               
            }
            else if( n1.toLowerCase()==brand || n1.includes(brand)){
@@ -79,6 +110,7 @@
                inner_div.setAttribute('class',"col-sm-4 p-4 sidebar align-items-center");
                inner_div.setAttribute('style','margin-top:20px')
               
+               flag=1; 
                //image
                let img=document.createElement('img');
                let imageString = "data:image/" + array[i].img.contentType + ";base64," + await toBase64(array[i].img.data.data);
@@ -114,7 +146,22 @@
 
                var fifth_label=document.createElement('label');
                fifth_label.innerHTML='<h5><b>Main Camera</b></h5>'+'&nbsp&nbsp&nbsp&nbsp  '+myarray[0]+' Mp<br>'+'&nbsp&nbsp&nbsp&nbsp&nbsp'
-               +myarray[1]+' Mp<br>'+'&nbsp&nbsp&nbsp&nbsp&nbsp'+myarray[2]+' Mp';
+               +myarray[1]+' Mp<br>'+'&nbsp&nbsp&nbsp&nbsp&nbsp'+myarray[2]+' Mp<br><br><br><br>';
+
+                var but=document.createElement('button');
+                var text = document.createTextNode("Add to cart");
+                but.setAttribute('class',"btn btn-primary btn-sm");
+                but.appendChild(text);
+
+                but.onclick=function(){
+                axios.post('http://localhost:8000/insertCart',{
+                  email:sessionStorage.getItem('user'),
+                  product:ph_name,
+                  price:price,
+                  quantity:1
+                })
+                window.location.href = "cart.html";
+            }
 
 
             //    var labelValue=document.createElement('label');
@@ -124,6 +171,7 @@
                  child_div2.appendChild(third_label);
                  child_div2.appendChild(fourth_label);
                  child_div2.appendChild(fifth_label);
+                 child_div2.appendChild(but);
 
 
 
@@ -135,9 +183,14 @@
                document.getElementById('main2').appendChild(inner_div);
                document.getElementById('main2').appendChild(child_div2);
 
-               break;
+               
            }
+           
         }
+        if(flag==0){
+             alert("Sorry We couldn't find what you are searching");
+             window.location.href="product.html"; 
+           }
         })
     }
     getimages();

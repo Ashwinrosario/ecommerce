@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Product Page</title>
     <script async src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"crossorigin="anonymous"></script>
     <script async src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -44,49 +44,63 @@
            for(var i=0;i<array.length;i++){
             let n=array[i].phoneName;
             let n2=array[i].androidVersion;
+            let price=array[i].price;
 
             console.log(n+" "+n2);
             let inner_div=document.createElement('div');
-            //let outer_div=document.createElement('div');
-            //inner_div.setAttribute('class',"p-2 border");
-            //inner_div.setAttribute('style',"border-radius: 1rem;");
-            inner_div.setAttribute('class',"col-md-4 justify-content-center align-items-center d-flex flex-column card bg-white rounded-pill");
+            inner_div.setAttribute('class',"col-md-4 justify-content-center align-items-center d-flex flex-column  bg-white rounded-pill");
             inner_div.setAttribute('style',"max-width:350px; margin-bottom:10px; margin-left:15px; padding:8px;");
 
             var labelValue=document.createElement('label');
-            labelValue.innerHTML='Model Name:'+n+'<br>'+'Anroid Version :'+n2+'<br>';
-            labelValue.setAttribute('class','bottom-0')
+            labelValue.innerHTML='<h5><b>'+n+'</b></h5>';
+
+            var pricelabel=document.createElement('label');
+            pricelabel.setAttribute('class','text-primary');
+            pricelabel.innerHTML=price;
 
             var img=document.createElement('img');
             let imageString = "data:image/" + array[i].img.contentType + ";base64," + await toBase64(array[i].img.data.data);
             img.setAttribute('src', imageString);
-            //img.setAttribute('width','175px');
-            img.setAttribute('height','200px');
-            //img.setAttribute('class','img-fluid')
-            var image= document.createElement('div')
-            image.appendChild(img)
-            
+            img.setAttribute('width','30%');
+            img.setAttribute('height','70%');
+    
 
             var but=document.createElement('button');
             var text = document.createTextNode("Add to cart");
-            but.setAttribute('class',"btn btn-primary mb-0 btn-sm");
+            but.setAttribute('class',"btn btn-primary btn-sm");
             but.appendChild(text);
+
+            var but1=document.createElement('button');
+            var text1 = document.createTextNode("View Details");
+            but1.setAttribute('class',"btn btn-success btn-sm");
+            but1.setAttribute('style','margin-top:3px');
+            but1.appendChild(text1);
+
+
             but.onclick=function(){
                 axios.post('http://localhost:8000/insertCart',{
                   email:sessionStorage.getItem('user'),
                   product:n,
+                  price:price,
                   quantity:1
                 })
                 window.location.href = "cart.html";
             }
 
+            but1.onclick=function(){
+              sessionStorage.setItem('user_searched',n);
+              window.location.href="searchPage.html";
+            }
 
 
             inner_div.appendChild(img);
             inner_div.appendChild(labelValue);
+            inner_div.appendChild(pricelabel);
             inner_div.appendChild(but);
+            inner_div.appendChild(but1);
+
             
-            inner_div.setAttribute('max-width','100px')
+
             document.getElementById('main1').appendChild(inner_div);
             //document.getElementById('main1').appendChild(img);
             //document.getElementById('main1').appendChild(labelValue);
@@ -113,20 +127,26 @@
       //}
       
     //}
+    function cart_page(){
+      window.location.href = "cart.html";
+    }
          
     </script>
 </head>
 <body>
   <nav class="navbar navbar-dark bg-primary">
-    <div class="container-fluid">
+    <div class="container-fluid ">
       <a class="navbar-brand">Mobile Paradise</a>
-      
-      <input id="search_button" class="form-control" style="border-radius:10px; width:45%; margin-left:10%;" type="search" placeholder="Search by brand or Product or RAM" aria-label="Search">
-      <button  style="margin-right:20%; " onclick="pass_data()" type="button" class="btn btn-secondary">
+      <div class="container d-flex">
+        <input id="search_button" class="form-control" style="border-radius:10px; width:45%; margin-left:10%;" type="search" placeholder="Search by brand or Product" aria-label="Search">
+         &nbsp&nbsp<button  style="margin-right:20%; " onclick="pass_data()" type="button" class="btn btn-secondary">
           <svg xmlns="http://www.w3.org/2000/svg"  width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
           </svg>
         </button>
+        <button class="btn btn-success btn-sm" onclick="cart_page()">View Cart</button>
+      </div>
+        
     </div>
   </nav><br><br>
   

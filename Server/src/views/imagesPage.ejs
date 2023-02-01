@@ -5,225 +5,127 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Image Uploading</title>
-	<script async src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"crossorigin="anonymous"></script>
-    <script async src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
 </head>
 
-
 <body>
-	
 	<h1>To Upload Image on mongoDB</h1>
 	<hr>
 	<div>
 		<form action="/" method="POST" enctype="multipart/form-data">
-			<div class="container">
-				<table class="table table-borderless">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Attributes</th>
-							<th>Values</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<th scope="row">1</th>
-							<td>
-								<label for="name">Phone Name</label>
-							</td>
-							<td>
-								<input type="text" id="name" placeholder="Name"
-								value="" name="name" required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">2</th>
-							<td>
-								<label for="cmpanyname">Company Name</label>
-							</td>
-							<td>
-								<input type="text" id="companyname" name="companyname" value="" rows="2"
+			<div>
+				<label for="name">Phone Name</label>
+				<input type="text" id="name" placeholder="Name"
+					value="" name="name" required />
+			</div>
+			<div>
+				<label for="cmpanyname">Company Name</label>
+				<input type="text" id="companyname" name="companyname" value="" rows="2"
 						 required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">3</th>
-							<td>
-								<label for="frontCam">Front Camera</label>
-							</td>
-							<td>
-								<input type="text" id="frontCam" name="frontCam" value="" rows="2"
+				
+			</div>
+			<div>
+				<label for="frontCam">Front Camera</label>
+				<input type="text" id="frontCam" name="frontCam" value="" rows="2"
 						 required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">4</th>
-							<td>
-								<label for="backCam">Back Camera</label>
-							</td>
-							<td>
-								<input type="text" id="backCam" name="backCam" value="" rows="2"
+				
+			</div>
+			<div>
+				<label for="backCam">Back Camera</label>
+				<input type="text" id="backCam" name="backCam" value="" rows="2"
 						 required >
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">5</th>
-							<td>
-								<label for="battery">Battery</label>
-							</td>
-							<td>
-								<input type="text" id="battery" name="battery" value="" rows="2"
+				
+			</div>
+			<div>
+				<label for="battery">Battery</label>
+				<input type="text" id="battery" name="battery" value="" rows="2"
 						 required>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">6</th>
-							<td>
-								<label for="androidVersion">Android Version</label>
-							</td>
-							<td>
-								<input type="text" id="androidVersion" name="androidVersion" value="" rows="2"
+				</input type="text">
+			</div>
+			<div>
+				<label for="androidVersion">Android Version</label>
+				<input type="text" id="androidVersion" name="androidVersion" value="" rows="2"
 						 required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">7</th>
-							<td>
-								<label for="price">price</label>
-							</td>
-							<td>
-								<input type="text" id="price" name="price" value="" rows="2"
+				
+			</div>
+			<div>
+				<label for="price">price</label>
+				<input type="text" id="price" name="price" value="" rows="2"
 						 required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">8</th>
-							<td>
-								<label for="image">Upload Image</label>
-							</td>
-							<td>
-								<input type="file" id="image"
+				
+			</div>
+			<div>
+				<label for="image">Upload Image</label>
+				<input type="file" id="image"
 					name="image" value="" required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">9</th>
-							<td>
-								<label for="internalStorage">Internal Storage</label>
-							</td>
-							<td>
-								<input type="text" id="internalStorage" name="internalStorage" value="" rows="2"
+			</div>
+			<div>
+				<label for="internalStorage">Internal Storage</label>
+				<input type="text" id="internalStorage" name="internalStorage" value="" rows="2"
 						 required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">10</th>
-							<td>
-								<label for="dimension">dimension</label>
-							</td>
-							<td>
-								<input type="text" id="dimension" name="dimension" value="" rows="2"
+				
+			</div>
+			<div>
+				<label for="dimension">dimension</label>
+				<input type="text" id="dimension" name="dimension" value="" rows="2"
 						 required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">11</th>
-							<td>
-								<label for="weight">weight</label>
-							</td>
-							<td>
-								<input type="text" id="weight" name="weight" value="" rows="2"
+				
+			</div>
+			<div>
+				<label for="weight">weight</label>
+				<input type="text" id="weight" name="weight" value="" rows="2"
 						 required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">12</th>
-							<td>
-								<label for="build">build</label>
-							</td>
-							<td>
-								<input type="text" id="build" name="build" value="" rows="2"
+				
+			</div>
+			<div>
+				<label for="build">build</label>
+				<input type="text" id="build" name="build" value="" rows="2"
 						 required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">13</th>
-							<td>
-								<label for="SIM">SIM</label>
-							</td>
-							<td>
-								<input type="text" id="SIM" name="SIM" value="" rows="2"
+				
+			</div>
+			<div>
+				<label for="SIM">SIM</label>
+				<input type="text" id="SIM" name="SIM" value="" rows="2"
 						 required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">14</th>
-							<td>
-								<label for="size">size</label>
-							</td>
-							<td>
-								<input type="text" id="size" name="size" value="" rows="2"
+				
+			</div>
+			<div>
+				<label for="size">size</label>
+				<input type="text" id="size" name="size" value="" rows="2"
 						 required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">15</th>
-							<td>
-								<label for="resolution">resolution</label>
-							</td>
-							<td>
-								<input type="text" id="resolution" name="resolution" value="" rows="2"
+				
+			</div>
+			<div>
+				<label for="resolution">resolution</label>
+				<input type="text" id="resolution" name="resolution" value="" rows="2"
 						 required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">16</th>
-							<td>
-								<label for="protection">protection</label>
-							</td>
-							<td>
-								<input type="text" id="protection" name="protection" value="" rows="2"
+				
+			</div>
+			<div>
+				<label for="protection">protection</label>
+				<input type="text" id="protection" name="protection" value="" rows="2"
 						 required />
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">17</th>
-							<td>
-								<label for="Technology">Technology</label>
-							</td>
-							<td>
-								<input type="text" id="Technology" name="Technology" value="" rows="2"
+				
+			</div>
+			<div>
+				<label for="Technology">Technology</label>
+				<input type="text" id="Technology" name="Technology" value="" rows="2"
 						 required />
-							</td>
-						</tr>
-						<tr>
-						<th scope="row">18</th>
-						<td>
-							<label for="GPU">GPU</label>
-						</td>
-						<td>
-							<input type="text" id="GPU" name="GPU" value="" rows="2"
-							required />
-						</td>
-					</tr>
-						<tr>
-							<th scope="row">19</th>
-						<td>
-							<label for="CPU">CPU</label>
-						</td>
-						<td>
-						<input type="text" id="CPU" name="CPU" value="" rows="2"
-						required />
-						</td>
-					</tr>
-				</tbody>
-				</table>
-				<div class="container">
-					<button class="btn btn-primary" type="submit">Submit</button>
-				</div>	
+				
+			</div>
+			<div>
+				<label for="GPU">GPU</label>
+				<input type="text" id="GPU" name="GPU" value="" rows="2"
+						 required />
+				
+			</div>
+			<div>
+				<label for="CPU">CPU</label>
+				<input type="text" id="CPU" name="CPU" value="" rows="2"
+						 required />
+				
+			</div>
+			<div>
+				<button type="submit">Submit</button>
 			</div>
 		</form>
 	</div>
@@ -231,13 +133,13 @@
 	<hr>
 
 	<h1>Uploaded Images</h1>
-	<div class="container">
+	<div>
 		<% items.forEach(function(image) { %>
 		<div>
 			<div>
 				<img src="data:image/<%=image.img.contentType%>;base64,
-					<%=image.img.data.toString('base64')%>" class="image">
-				<div class="d-flex">
+					<%=image.img.data.toString('base64')%>">
+				<div>
 					<h5><%= image.name %></h5>
 					
 

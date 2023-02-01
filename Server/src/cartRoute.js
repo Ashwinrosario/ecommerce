@@ -2,10 +2,11 @@ const express=require('express');
 const { default: mongoose } = require('mongoose');
 const cart=require('./modules/user_cartSchema');
 
+
 const router=express.Router();
 
-router.get('/usercart',async(req,res)=>{
-    console.log('from usercart',req.body);
+router.post('/usercart',async(req,res)=>{
+    console.log(req.body);
     const user=await cart.find(req.body)
     if(!user){
         res.json({
@@ -20,10 +21,9 @@ router.get('/usercart',async(req,res)=>{
 })
 
 router.post('/insertCart',async(req,res)=>{
-    console.log('from insert cart',req.body);
+    console.log(req.body);
     const data=new cart(req.body);
     const result=await data.save();
-    console.log('from insertcart result:',result);
     if(!result){
         res.json({
             status:"Error"
@@ -38,7 +38,8 @@ router.post('/insertCart',async(req,res)=>{
 })
 
 router.delete('/removeCart',async(req,res)=>{
-    //try{
+
+    try{
     console.log('from removeCart:',req.body);
     const res1=await cart.deleteOne(req.body);
     if(res1){
@@ -46,10 +47,11 @@ router.delete('/removeCart',async(req,res)=>{
             "status":"successfully deleted"
         })
     }
-    //}
-    //catch(err){
-    //    console.log(err);
-    //}
-})
+    }
+    catch(err){
+        console.log(err);
+    }
+});
+
 
 module.exports=router

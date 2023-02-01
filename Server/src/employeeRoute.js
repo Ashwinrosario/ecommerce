@@ -2,6 +2,7 @@ const express= require('express')
 const user=require('./modules/userSchema.js')
 var imgModel=require('./modules/mobileSchema.js')
 var upload=require('./modules/multer.js')
+const nodemailer=require('nodemailer');
 
 const router=express.Router();
 var fs = require('fs');
@@ -11,7 +12,9 @@ router.post('/insertrec',async(req,res)=>{
     try{
         console.log(req.body)
         const data=new user(req.body)
+        console.log(req.body.email)
         const result=await data.save()
+
         if(!result){
             res.json({
                 status:"Failed",
@@ -25,15 +28,36 @@ router.post('/insertrec',async(req,res)=>{
                 data:result
             })
         }
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'murugan.vishnurahul@gmail.com',
+              pass: 'jbbesyhguazsnioa'
+            }
+          });
+          
+          var mailOptions = {
+            from: 'murugan.vishnurahul@gmail.com',
+            to: req.body.email,
+            subject: 'Sending Email',
+            text: 'Thank you for choosing mobile Paradise. Happy Shopping'
+          };
+          
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
     }
     catch(e){
         console.log(e)
     }
  }),
 
-
-
 router.get('/getuser',async(req,res)=>{
+    //res.header("Access-Control-Allow-Origin", "*");
     try{
         const users=await user.find()
         if(!users){
@@ -44,33 +68,20 @@ router.get('/getuser',async(req,res)=>{
         }
         else{
             res.json({
+                //status:"success",
+                //message:"successfully retrieved",
                 users
             })
+            //console.log(result);
         }
+        
     }
     catch(e){
         console.log(e)
     }
 }),
 
-router.post('/encrypt',async(req,res)=>{
-    console.log('from router printing the request',req.body);
-    var pass =req.body.pass;
-    const bcrypt = require('bcryptjs');
-      const decrypt = async(password)=>{
-        const hash = await bcrypt.hash(password,1);
-                                                                                                                                                                                                                                                                                                                                                                                                                                       this.password = hash;
-        console.log('from login hash',this.password)
-    }
-      decrypt(pass);
-      //    bcrypt.compare(pass,hash)
-      res.json({
-        data:this.password
-    })
- }),
-
- 
- router.post('/check',async(req,res)=>{
+router.post('/check',async(req,res)=>{
     console.log('from check printing request body',req.body);
     const pass = req.body.pass ;
     const hash = req.body.hash;
@@ -86,8 +97,7 @@ router.post('/encrypt',async(req,res)=>{
     })
  }),
 
-
-router.post('/singlerec',async(req,res)=>{
+ router.post('/singlerec',async(req,res)=>{
     console.log('from singlerec',req.body);
     const users=await user.find(req.body);
     if(!users){
@@ -104,6 +114,7 @@ router.post('/singlerec',async(req,res)=>{
 }),
 
 router.post('/', upload.single('image'), (req, res, next) => {
+ 
     var obj = {
         phoneName: req.body.name,
         companyName: req.body.companyname,
@@ -160,7 +171,7 @@ router.get('/getimages',(req,res)=>{
             res.json(items);
         }
     })
-})
+});
 
 
 router.post('/getSingleimage',async(req,res)=>{
@@ -172,9 +183,9 @@ router.post('/getSingleimage',async(req,res)=>{
         })
     }
     else{
-         res.json({
-             data
-         })
+        res.json({
+            data
+        })
     }       
 })
 

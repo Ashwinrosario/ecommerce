@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <style>
@@ -56,10 +56,11 @@ border-bottom-right-radius: 16px;
            qw
         );
         } 
-    var user=sessionStorage.getItem('user');
+    var user1=sessionStorage.getItem('user');
+    console.log(user1);
     var product=[];
-    const data=async()=>{const res=await axios.get('http://localhost:8000/usercart',{user}).then(response=>{
-      //console.log(response);
+    const data=async()=>{const res=await axios.post('http://localhost:8000/usercart',{email:user1}).then(response=>{
+      console.log(response);
       var arr=response.data.user;
       console.log(arr.length);
       
@@ -69,11 +70,14 @@ border-bottom-right-radius: 16px;
       document.getElementById("total_items1").innerHTML='Items:'+items;
 
       // console logging the product in db:
+      let price=0;
       for(let i=0;i<arr.length;i++){
          product[i]=arr[i].product;
-         console.log(product[i],arr[i].product) 
+         price+=Number(price)+Number(arr[i].price);
+         //console.log(product[i],arr[i].product) 
       }
-
+      document.getElementById('price').innerHTML=price;
+      document.getElementById('price1').innerHTML=price;   
       
       console.log('no of products in cart db',arr.length)
       for(let j=0;j<product.length;j++){
@@ -182,13 +186,11 @@ border-bottom-right-radius: 16px;
           document.getElementById('main1').appendChild(inner_div)
           
           
-          //document.getElementById('main1').appendChild(inner_div);
-
           
-//          document.getElementById('main1').appendChild(line);
           })
         }
         getimg();
+
       }
     
     })
@@ -196,6 +198,9 @@ border-bottom-right-radius: 16px;
   data();
   //document.getElementById('items').appendChild(items)
   
+  function payment(){
+          window.location.href="paypal.html";
+        }
    
     
     
@@ -248,19 +253,9 @@ border-bottom-right-radius: 16px;
 
                   <div class="d-flex justify-content-between mb-4">
                     <h5 class="text-uppercase" id="total_items1"></h5>
-                    <h5>€ 132.00</h5>
+                    <h5 id="price"></h5>
                   </div>
 
-                  <h5 class="text-uppercase mb-3">Shipping</h5>
-
-                  <div class="mb-4 pb-2">
-                    <select class="select">
-                      <option value="1">Standard-Delivery- €5.00</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                      <option value="4">Four</option>
-                    </select>
-                  </div>
 
                   <h5 class="text-uppercase mb-3">Give code</h5>
 
@@ -275,11 +270,11 @@ border-bottom-right-radius: 16px;
 
                   <div class="d-flex justify-content-between mb-5">
                     <h5 class="text-uppercase">Total price</h5>
-                    <h5>€ 137.00</h5>
+                    <h5 id="price1"></h5>
                   </div>
 
                   <button type="button" class="btn btn-dark btn-block btn-lg"
-                    data-mdb-ripple-color="dark">Register</button>
+                    data-mdb-ripple-color="dark" onclick="payment()">Proceed to Pay</button>
 
                 </div>
               </div>
@@ -293,6 +288,3 @@ border-bottom-right-radius: 16px;
 
 
 <!-- sample -->
-
-
-

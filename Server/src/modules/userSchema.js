@@ -26,13 +26,6 @@ address:{
 },
 });
 
-// const bcrypt = require('bcryptjs');
-//       const decrypt = async(password)=>{
-//         const hash = await bcrypt.hash(password,0);
-//         this.password = hash;
-//         console.log('from login hash',this.password)
-//     }
-//      decrypt(pass);
 
 userSchema.pre('save',function (next){
     if(this.isModified('password')){

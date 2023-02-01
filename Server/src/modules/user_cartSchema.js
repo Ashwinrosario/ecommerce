@@ -12,6 +12,10 @@ const userCart=new mongoose.Schema({
     quantity:{
         type:Number,
         required:true
+    },
+    price:{
+        type:String,
+        required:true
     }
 });
 
