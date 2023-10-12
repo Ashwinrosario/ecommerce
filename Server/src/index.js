@@ -20,7 +20,9 @@ app.use(cartRoute)
 app.listen(port, ()=>{
     console.log("connection is setup",port);
 })
+var path = require('path');
 
  
 // Set EJS as templating engine
+app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs");

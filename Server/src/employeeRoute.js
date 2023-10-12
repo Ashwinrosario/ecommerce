@@ -113,38 +113,75 @@ router.post('/check',async(req,res)=>{
     }
 }),
 
+// router.post('/', upload.single('image'), (req, res, next) => {
+//     console.log(req.body)
+//     var obj = {
+//         phoneName: req.body.name,
+//         companyName: req.body.companyname,
+//         img: {
+//             data: fs.readFileSync(path.join(__dirname + 'src/uploads/' + req.file.filename)),
+//             contentType: 'image/png'
+//         },
+//         frontCam:req.body.frontCam,
+//         backCam:req.body.backCam,
+//         battery:req.body.battery,
+//         androidVersion:req.body.androidVersion,
+//         internalStorage:req.body.internalStorage,
+//         price:req.body.price,
+//         dimension:req.body.dimension,
+//         weight:req.body.weight,
+//         build:req.body.build,
+//         SIM:req.body.SIM,
+//         size:req.body.size,
+//         resolution:req.body.resolution,
+//         protection:req.body.protection,
+//         Technology:req.body.Technology,
+//         CPU:req.body.CPU,
+//         GPU:req.body.GPU
+//     }
+//     imgModel.create(obj, (err, item) => {
+//         if (err) {
+//             console.log(err);
+//         }
+//         else {
+//             // item.save();
+//             res.redirect('/');
+//         }
+//     });
+// });
+
 router.post('/', upload.single('image'), (req, res, next) => {
- 
+    console.log(req.body);
     var obj = {
         phoneName: req.body.name,
         companyName: req.body.companyname,
         img: {
-            data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+            data: fs.readFileSync(path.join(__dirname, 'uploads/', req.file.filename)), // Use path.join to create the correct file path
             contentType: 'image/png'
         },
-        frontCam:req.body.frontCam,
-        backCam:req.body.backCam,
-        battery:req.body.battery,
-        androidVersion:req.body.androidVersion,
-        internalStorage:req.body.internalStorage,
-        price:req.body.price,
-        dimension:req.body.dimension,
-        weight:req.body.weight,
-        build:req.body.build,
-        SIM:req.body.SIM,
-        size:req.body.size,
-        resolution:req.body.resolution,
-        protection:req.body.protection,
-        Technology:req.body.Technology,
-        CPU:req.body.CPU,
-        GPU:req.body.GPU
-    }
+        frontCam: req.body.frontCam,
+        backCam: req.body.backCam,
+        battery: req.body.battery,
+        androidVersion: req.body.androidVersion,
+        internalStorage: req.body.internalStorage,
+        price: req.body.price,
+        dimension: req.body.dimension,
+        weight: req.body.weight,
+        build: req.body.build,
+        SIM: req.body.SIM,
+        size: req.body.size,
+        resolution: req.body.resolution,
+        protection: req.body.protection,
+        Technology: req.body.Technology,
+        CPU: req.body.CPU,
+        GPU: req.body.GPU
+    };
+
     imgModel.create(obj, (err, item) => {
         if (err) {
             console.log(err);
-        }
-        else {
-            // item.save();
+            res.status(500).send('An error occurred: ' + err);
+        } else {
             res.redirect('/');
         }
     });
