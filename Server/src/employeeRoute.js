@@ -31,13 +31,13 @@ router.post('/insertrec',async(req,res)=>{
         var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-              user: 'ashwinkaranthamalai@gmail.com',
-              pass: 'erwafncksdyciqvz'
+              user: 'xxxxxxxxxxx@gmail.com',
+              pass: 'xxxxxxxxxxxx'
             }
           });
           
           var mailOptions = {
-            from: 'ashwinkaranthamalai@gmail.com',
+            from: 'xxxxxxxx@gmail.com',
             to: req.body.email,
             subject: 'Sending Email',
             text: 'Thank you for choosing mobile Paradise. Happy Shopping'
